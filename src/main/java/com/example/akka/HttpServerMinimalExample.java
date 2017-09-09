@@ -55,7 +55,7 @@ public class HttpServerMinimalExample extends AllDirectives {
   @GET
   @Path("/hello")
   @Produces("text/html")
-  @Operation(summary = "hello", description = "hello", method = "GET",
+  @Operation(summary = "hello", description = "hello",
     responses = {
       @ApiResponse(responseCode = "200", description = "HTML response", content = @Content(mediaType = "text/html")),
       @ApiResponse(responseCode = "500", description = "Internal server error")
