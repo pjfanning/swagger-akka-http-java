@@ -4,7 +4,9 @@ import static ch.megard.akka.http.cors.javadsl.CorsDirectives.cors;
 
 import java.util.concurrent.CompletionStage;
 
+import javax.ws.rs.GET;
 import javax.ws.rs.Path;
+import javax.ws.rs.Produces;
 
 import akka.NotUsed;
 import akka.actor.ActorSystem;
@@ -21,12 +23,10 @@ import akka.http.javadsl.server.Route;
 import akka.stream.ActorMaterializer;
 import akka.stream.javadsl.Flow;
 import ch.megard.akka.http.cors.javadsl.settings.CorsSettings;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiResponse;
-import io.swagger.annotations.ApiResponses;
+import io.swagger.oas.annotations.Operation;
+import io.swagger.oas.annotations.media.Content;
+import io.swagger.oas.annotations.responses.ApiResponse;
 
-@Api(value = "/", produces = "text/html")
 @Path("/")
 public class HttpServerMinimalExample extends AllDirectives {
 
@@ -52,9 +52,14 @@ public class HttpServerMinimalExample extends AllDirectives {
         .thenAccept(unbound -> system.terminate()); // and shutdown when done
   }
 
+  @GET
   @Path("/hello")
-  @ApiOperation(value = "hello", code = 200, nickname = "hello", httpMethod = "GET", response = String.class)
-  @ApiResponses(value = { @ApiResponse(code = 500, message = "Internal server error") })
+  @Produces("text/html")
+  @Operation(summary = "hello", description = "hello", method = "GET",
+    responses = {
+      @ApiResponse(responseCode = "200", description = "HTML response", content = @Content(mediaType = "text/html")),
+      @ApiResponse(responseCode = "500", description = "Internal server error")
+    })
   public Route createRoute() {
     HttpEntity.Strict entity = HttpEntities.create(ContentTypes.TEXT_HTML_UTF8, "<h1>Say hello to akka-http</h1>");
     final Route route = route(path("hello", () -> get(() -> complete(entity))));
