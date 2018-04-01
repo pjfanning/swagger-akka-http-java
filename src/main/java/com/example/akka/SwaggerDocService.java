@@ -8,10 +8,10 @@ import akka.http.javadsl.server.AllDirectives;
 import akka.http.javadsl.server.PathMatchers;
 import akka.http.javadsl.server.Route;
 import ch.megard.akka.http.cors.javadsl.settings.CorsSettings;
-import io.swagger.jaxrs2.Reader;
-import io.swagger.oas.integration.SwaggerConfiguration;
-import io.swagger.oas.models.OpenAPI;
-import io.swagger.util.Json;
+import io.swagger.v3.core.util.Json;
+import io.swagger.v3.jaxrs2.Reader;
+import io.swagger.v3.oas.integration.SwaggerConfiguration;
+import io.swagger.v3.oas.models.OpenAPI;
 
 class SwaggerDocService extends AllDirectives {
   SwaggerConfiguration readerConfig = new SwaggerConfiguration();
