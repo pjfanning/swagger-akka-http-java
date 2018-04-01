@@ -8,13 +8,13 @@ import akka.http.javadsl.server.AllDirectives;
 import akka.http.javadsl.server.PathMatchers;
 import akka.http.javadsl.server.Route;
 import ch.megard.akka.http.cors.javadsl.settings.CorsSettings;
-import io.swagger.jaxrs.Reader;
-import io.swagger.jaxrs.config.DefaultReaderConfig;
-import io.swagger.models.Swagger;
-import io.swagger.util.Json;
+import io.swagger.v3.core.util.Json;
+import io.swagger.v3.jaxrs2.Reader;
+import io.swagger.v3.oas.integration.SwaggerConfiguration;
+import io.swagger.v3.oas.models.OpenAPI;
 
 class SwaggerDocService extends AllDirectives {
-  DefaultReaderConfig readerConfig = new DefaultReaderConfig();
+  SwaggerConfiguration readerConfig = new SwaggerConfiguration();
 
   Route createRoute() {
     final Route route = route(path(PathMatchers.segment("api-docs").slash("swagger.json"), () -> get(() -> complete(swaggerJson()))));
@@ -24,9 +24,9 @@ class SwaggerDocService extends AllDirectives {
 
   private String swaggerJson() {
     try {
-      final Swagger swaggerConfig = new Swagger();
-      final Reader reader = new Reader(swaggerConfig, readerConfig);
-      final Swagger swagger = reader.read(HttpServerMinimalExample.class);
+      final OpenAPI openAPI = new OpenAPI();
+      final Reader reader = new Reader(readerConfig.openAPI(openAPI));
+      final OpenAPI swagger = reader.read(HttpServerMinimalExample.class);
       return Json.pretty().writeValueAsString(swagger);
     } catch (JsonProcessingException e) {
       throw new RuntimeException(e);
