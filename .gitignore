@@ -1,3 +1,4 @@
 swagger-akka-http-java.iml
 .idea
 .idea_modules
+.bsp/sbt.json
