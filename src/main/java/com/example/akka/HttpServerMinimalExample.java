@@ -8,20 +8,14 @@ import jakarta.ws.rs.GET;
 import jakarta.ws.rs.Path;
 import jakarta.ws.rs.Produces;
 
-import akka.NotUsed;
 import akka.actor.ActorSystem;
-import akka.http.javadsl.ConnectHttp;
 import akka.http.javadsl.Http;
 import akka.http.javadsl.ServerBinding;
 import akka.http.javadsl.model.ContentTypes;
 import akka.http.javadsl.model.HttpEntities;
 import akka.http.javadsl.model.HttpEntity;
-import akka.http.javadsl.model.HttpRequest;
-import akka.http.javadsl.model.HttpResponse;
 import akka.http.javadsl.server.AllDirectives;
 import akka.http.javadsl.server.Route;
-import akka.stream.ActorMaterializer;
-import akka.stream.javadsl.Flow;
 import ch.megard.akka.http.cors.javadsl.settings.CorsSettings;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -35,15 +29,14 @@ public class HttpServerMinimalExample extends AllDirectives {
     ActorSystem system = ActorSystem.create("routes");
 
     final Http http = Http.get(system);
-    final ActorMaterializer materializer = ActorMaterializer.create(system);
 
     // In order to access all directives we need an instance where the routes
     // are define.
     HttpServerMinimalExample app = new HttpServerMinimalExample();
 
     final Route routes = app.concat(app.createRoute(), new SwaggerDocService().createRoute());
-    final Flow<HttpRequest, HttpResponse, NotUsed> routeFlow = routes.flow(system, materializer);
-    final CompletionStage<ServerBinding> binding = http.bindAndHandle(routeFlow, ConnectHttp.toHost("localhost", 8080), materializer);
+    final CompletionStage<ServerBinding> binding = http.newServerAt("localhost", 8080)
+            .bind(routes);
 
     System.out.println("Server online at http://localhost:8080/\nPress RETURN to stop...");
     System.in.read(); // let it run until user presses return
