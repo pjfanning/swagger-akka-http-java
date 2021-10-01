@@ -4,9 +4,9 @@ import static ch.megard.akka.http.cors.javadsl.CorsDirectives.cors;
 
 import java.util.concurrent.CompletionStage;
 
-import javax.ws.rs.GET;
-import javax.ws.rs.Path;
-import javax.ws.rs.Produces;
+import jakarta.ws.rs.GET;
+import jakarta.ws.rs.Path;
+import jakarta.ws.rs.Produces;
 
 import akka.NotUsed;
 import akka.actor.ActorSystem;
@@ -41,7 +41,7 @@ public class HttpServerMinimalExample extends AllDirectives {
     // are define.
     HttpServerMinimalExample app = new HttpServerMinimalExample();
 
-    final Route routes = app.route(app.createRoute(), new SwaggerDocService().createRoute());
+    final Route routes = app.concat(app.createRoute(), new SwaggerDocService().createRoute());
     final Flow<HttpRequest, HttpResponse, NotUsed> routeFlow = routes.flow(system, materializer);
     final CompletionStage<ServerBinding> binding = http.bindAndHandle(routeFlow, ConnectHttp.toHost("localhost", 8080), materializer);
 
