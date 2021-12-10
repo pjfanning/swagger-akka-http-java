@@ -4,8 +4,8 @@ scalaVersion := "2.13.6"
 
 //resolvers += Resolver.sonatypeRepo("snapshots")
 
-val akkaVersion = "2.6.16"
-val akkaHttpVersion = "10.2.6"
+val akkaVersion = "2.6.17"
+val akkaHttpVersion = "10.2.7"
 
 libraryDependencies ++= Seq(
   "io.swagger.core.v3" % "swagger-jaxrs2-jakarta" % "2.1.11",
