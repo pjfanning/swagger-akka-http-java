@@ -1,10 +1,10 @@
 name := "swagger-akka-http-java"
 
-scalaVersion := "2.13.6"
+scalaVersion := "2.13.7"
 
 //resolvers += Resolver.sonatypeRepo("snapshots")
 
-val akkaVersion = "2.6.17"
+val akkaVersion = "2.6.18"
 val akkaHttpVersion = "10.2.7"
 
 libraryDependencies ++= Seq(
